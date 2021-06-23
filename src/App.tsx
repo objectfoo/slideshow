@@ -1,14 +1,20 @@
+import { v4 } from "uuid";
 import './App.css';
 import { SlideShow } from "./slideshow/slideshow";
 
 const data = [
-	{ id: 0, title: "number one", times: 1 },
-	{ id: 1, title: "number two", times: 3 },
-	{ id: 2, title: "number three", times: 2 },
-	{ id: 3, title: "number four", times: 1 },
-	{ id: 4, title: "number five", times: 3 },
-	{ id: 5, title: "number six", times: 1 },
-	{ id: 6, title: "number seven", times: 1 },
+	{ id: v4(), title: "number one", times: 1 },
+	{ id: v4(), title: "number two", times: 3 },
+	{ id: v4(), title: "number three", times: 2 },
+	{ id: v4(), title: "number four", times: 1 },
+	{ id: v4(), title: "number five", times: 3 },
+	{ id: v4(), title: "number six", times: 1 },
+	{ id: v4(), title: "number seven", times: 1 },
+	{ id: v4(), title: "number eight", times: 1 },
+	{ id: v4(), title: "number nine", times: 1 },
+	{ id: v4(), title: "number ten", times: 1 },
+	{ id: v4(), title: "number eleven", times: 1 },
+	{ id: v4(), title: "number twelve", times: 1 },
 ];
 
 const App: React.FC = () => {

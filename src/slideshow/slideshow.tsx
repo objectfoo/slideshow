@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, createRef } from "react";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import "./slideshow.css";
 
 export type SlideShowData = {
-	id: number;
+	id: string;
 	title: string;
 	times: number;
 };
@@ -16,28 +16,30 @@ export const SlideShow: React.FC<{
 	const { data } = props;
 	const [selected, setSelected] = useState(0);
 	const [dir, setDir] = useState<"left"|"right">("left");
-	const slides = useMemo(() => data, [data]);
-	const clampToSlides = clamp(0, slides.length - 1);
+	const clampToSlides = clamp(0, data.length - 1);
+	const leftDisabled = selected  === 0;
+	const rightDisabled = selected === data.length - 1;
 
 	return (
 		<div>
 			<div>
-				<button disabled={selected === 0} onClick={() => {
+				<button disabled={leftDisabled} onClick={() => {
 					setDir("left");
 					setSelected(clampToSlides(selected - 1));
 				}}>prev</button>
-				<button disabled={selected === slides.length - 1} onClick={() => {
+				<button disabled={rightDisabled} onClick={() => {
 					setDir("right");
 					setSelected(clampToSlides(selected + 1));
 				}}>next</button>
 			</div>
 			<TransitionGroup className={`list ${dir}`}>
-				{slides.filter((s) => s.id === selected).map((slide) => {
+				{data.filter((_, idx) => idx === selected).map((slide) => {
+					const nodeRef = createRef<HTMLDivElement>();
 					return (
-						<CSSTransition classNames="example" in={selected === slide.id} key={slide.id} timeout={300} enter exit>
-							<div style={{ width: 200 }}>
+						<CSSTransition nodeRef={nodeRef} classNames="example" in={true} key={slide.id} timeout={300} enter exit>
+							<div style={{ width: 200 }} ref={nodeRef}>
 								<div style={{ margin: "4px", border: "1px solid #ccc", background: "#f0f0f0"}}>
-									{new Array(slide.times).fill(null).map(() => <p>{slide.title}</p>)}
+									{repeat(slide.times, (i) => <p key={`${slide.title}-${i}`}>{slide.title}</p>)}
 								</div>
 							</div>
 						</CSSTransition>
@@ -47,3 +49,7 @@ export const SlideShow: React.FC<{
 		</div>
 	);
 };
+
+const repeat = (times: number, fn: (idx: number) => JSX.Element) => (
+	new Array(times).fill(null).map((_, idx) => fn(idx))
+);
